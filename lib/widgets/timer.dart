@@ -55,51 +55,61 @@ class _TimerWidgetState extends State<TimerWidget> {
             hours: false,
           );
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                displayTime,
-                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              Row(
+          return
+               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    onPressed: stopWatchTimer.onResetTimer,
-                    icon: Icon(Icons.refresh,
-                      color: Colors.black,),
-                  ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {});
-                      if (stopWatchTimer.isRunning) {
-                        stopWatchTimer.onStopTimer();
-                      } else {
-                        stopWatchTimer.onStartTimer();
-                      }
-                    },
-                    icon: Icon(
-                      stopWatchTimer.isRunning
-                          ? Icons.pause
-                          : Icons.play_arrow_outlined, size: 30,
-                      color: Colors.black,
+                  SizedBox(
+                      height: 40,),
+
+                  Text(
+                    displayTime,
+                    style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      // Open settings
-                    },
-                    icon: Icon(Icons.settings,
-                      color: Colors.black,),
+                  SizedBox(
+                      height: 20,
+                      ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: stopWatchTimer.onResetTimer,
+                        icon: Icon(Icons.refresh,
+                          color: Colors.black,),
+                      ),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {});
+                          if (stopWatchTimer.isRunning) {
+                            stopWatchTimer.onStopTimer();
+                          } else {
+                            stopWatchTimer.onStartTimer();
+                          }
+                        },
+                        icon: Icon(
+                          stopWatchTimer.isRunning
+                              ? Icons.pause_outlined
+                              : Icons.play_arrow_outlined, size: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          // Open settings
+                        },
+                        icon: Icon(Icons.settings,
+                          color: Colors.black,),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
-          );
+              );
+
         },
       ),
     );
