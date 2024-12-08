@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro_widget/screens/config_screen.dart';
 import 'package:pomodoro_widget/utils/timer_provider.dart';
+import 'package:pomodoro_widget/widgets/config_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
@@ -14,25 +16,24 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   @override
   void initState() {
-
     super.initState();
     final timerProvider = context.read<TimerProvider>();
     stopWatchTimer = StopWatchTimer(
       mode: StopWatchMode.countDown,
-      presetMillisecond:
-      StopWatchTimer.getMilliSecFromMinute(timerProvider.currentTimer),
+      presetMillisecond: StopWatchTimer.getMilliSecFromMinute(timerProvider.currentTimer),
     );
+  }
 
-    // Listen for changes in TimerProvider and update the timer
-    context.read<TimerProvider>().addListener(() {
-      stopWatchTimer.setPresetTime(
-        mSec:
-        StopWatchTimer.getMilliSecFromMinute(
-            timerProvider.currentTimer),
-        add: false// Adjust this based on active mode
-      );
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final timerProvider = context.watch<TimerProvider>();
 
+    // Atualiza o tempo do timer sempre que as dependências mudarem
+    stopWatchTimer.setPresetTime(
+      mSec: StopWatchTimer.getMilliSecFromMinute(timerProvider.currentTimer),
+      add: false,
+    );
   }
 
   @override
@@ -55,61 +56,59 @@ class _TimerWidgetState extends State<TimerWidget> {
             hours: false,
           );
 
-          return
-               Column(
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 40),
+              Text(
+                displayTime,
+                style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                      height: 40,),
-
-                  Text(
-                    displayTime,
-                    style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      fontWeight: FontWeight.w600,
+                  IconButton(
+                    onPressed: stopWatchTimer.onResetTimer,
+                    icon: Icon(Icons.refresh, color: Colors.black),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {});
+                      if (stopWatchTimer.isRunning) {
+                        stopWatchTimer.onStopTimer();
+                      } else {
+                        stopWatchTimer.onStartTimer();
+                      }
+                    },
+                    icon: Icon(
+                      stopWatchTimer.isRunning
+                          ? Icons.pause_outlined
+                          : Icons.play_arrow_outlined,
+                      size: 30,
+                      color: Colors.black,
                     ),
                   ),
-                  SizedBox(
-                      height: 20,
-                      ),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: stopWatchTimer.onResetTimer,
-                        icon: Icon(Icons.refresh,
-                          color: Colors.black,),
-                      ),
-                      Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {});
-                          if (stopWatchTimer.isRunning) {
-                            stopWatchTimer.onStopTimer();
-                          } else {
-                            stopWatchTimer.onStartTimer();
-                          }
-                        },
-                        icon: Icon(
-                          stopWatchTimer.isRunning
-                              ? Icons.pause_outlined
-                              : Icons.play_arrow_outlined, size: 30,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          // Open settings
-                        },
-                        icon: Icon(Icons.settings,
-                          color: Colors.black,),
-                      ),
-                    ],
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ConfigScreen()),
+                      ).then((_) {
+                        setState(() {
+                        });
+                      });
+                    },
+                    icon: Icon(Icons.settings, color: Colors.black),
                   ),
                 ],
-              );
-
+              ),
+            ],
+          );
         },
       ),
     );

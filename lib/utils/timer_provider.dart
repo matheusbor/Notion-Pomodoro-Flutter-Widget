@@ -21,16 +21,19 @@ class TimerProvider with ChangeNotifier {
   void setPomodoroTimer(int minutes) {
     _pomodoroTimer = minutes;
     notifyListeners();
+    usePomodoroTimer();
   }
 
   void setShortBreakTimer(int minutes) {
     _shortBreakTimer = minutes;
     notifyListeners();
+    useShortBreakTimer();
   }
 
   void setLongBreakTimer(int minutes) {
     _longBreakTimer = minutes;
     notifyListeners();
+    useLongBreakTimer();
   }
 
   void usePomodoroTimer() {

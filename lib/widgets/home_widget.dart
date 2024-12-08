@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    
+    final timerProvider = Provider.of<TimerProvider>(context);
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: 400,
